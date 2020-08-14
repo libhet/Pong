@@ -21,11 +21,11 @@
 
 class Transformation {
 public:
-    void SetScale(float x, float y) {
+    void Scale(float x, float y) {
         matrix = glm::scale(matrix, glm::vec3(x, y, 1));
     }
-    void SetScale(float x) {
-        SetScale(x, x);
+    void Scale(float x) {
+        Scale(x, x);
     }
 
     void Translate(float x, float y) {
@@ -33,7 +33,7 @@ public:
     }
 
     void Rotate(float a) {
-        matrix = glm::rotate(matrix, a, glm::vec3(0.0f, 0.0f, 1.0f));
+        matrix = glm::rotate(matrix, glm::radians(a), glm::vec3(0.0f, 0.0f, 1.0f));
     }
 
     void Reset() {
@@ -41,6 +41,14 @@ public:
     }
 
     glm::mat4 matrix = glm::mat4(1.f);
+};
+
+class Projection {
+    Projection() {
+
+    }
+
+    glm::mat4 matrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f );
 };
 
 class SceneObject {
@@ -104,6 +112,7 @@ private:
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glBindVertexArray(0);
+        view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
     }
 
     void DrawItself() {
@@ -116,7 +125,17 @@ private:
             glUniform3f(m_shader->GetUniformLocation("ourColor"), m_color.r, m_color.g, m_color.b);
 
             // transformation
-            glUniformMatrix4fv(m_shader->GetUniformLocation("transform"), 1, GL_FALSE, glm::value_ptr(transform.matrix));
+            glUniformMatrix4fv(m_shader->GetUniformLocation("model"), 1, GL_FALSE, glm::value_ptr(transform.matrix));
+
+            // projection
+            const float aspect = (float)600 / (float)900;
+            float n = 900/2; // (-1; 1)
+            projection_matrix = glm::ortho(-n, n, -n * aspect, n * aspect, 0.1f, 100.0f);
+            glUniformMatrix4fv(m_shader->GetUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(projection_matrix));
+
+            // projection
+
+            glUniformMatrix4fv(m_shader->GetUniformLocation("view"), 1, GL_FALSE, glm::value_ptr(view_matrix));
 
             glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
@@ -150,6 +169,9 @@ private:
     std::vector<SceneObject*> m_children;
 
     Color m_color = Color(1,1,1,1);
+
+    glm::mat4 projection_matrix = glm::mat4(1.f);
+    glm::mat4 view_matrix = glm::mat4(1.f);
 
 };
 

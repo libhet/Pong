@@ -23,7 +23,10 @@ int main()
     auto d = drw::color::Flame;
 
     auto scene = new Scene("main", &default_shader);
-//    scene->get_root()->transform.Translate(1,1);
+    auto background = scene->get_root();
+    background->transform.Scale(900, 600);
+//    background->transform.Translate(2,0);
+    background->SetColor(niagara);
     display.SetScene(scene);
     display.Start();
 
