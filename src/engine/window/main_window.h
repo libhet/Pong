@@ -7,10 +7,16 @@
 // GLFW
 #include <GLFW/glfw3.h>
 
+#include "../scene/scene.h"
+
 #include <iostream>
 #include <functional>
 #include <string>
 #include <thread>
+
+#include <chrono>
+
+using namespace std::chrono_literals;
 
 namespace drw {
 
@@ -22,23 +28,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-enum class WindowMode {
+enum class DisplayMode {
     WINDOWED = 0,
     FULLSCREEN,
 
 };
 
-class MainWindow {
-private:
-    GLFWwindow* _window = nullptr;
-    GLFWmonitor* _monitor = nullptr;
-    size_t _height;
-    size_t _width;
-    std::string _name;
-    std::function<void(void)> _render_function; // сделать ее указателем на метод класса RenderBase::Render
+class Display {
 
 public:
-    MainWindow(size_t width, size_t height, const char *name, WindowMode mode)
+    Display(size_t width, size_t height, const char *name, DisplayMode mode)
         : _height(height), _width(width), _name(name)
     {
         glfwInit();
@@ -48,7 +47,7 @@ public:
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-         if(mode == WindowMode::FULLSCREEN) {
+         if(mode == DisplayMode::FULLSCREEN) {
              _monitor = glfwGetPrimaryMonitor();
          }
 
@@ -79,6 +78,14 @@ public:
         glViewport(0, 0, w, h);
     }
 
+    ~Display() {
+        glfwTerminate();
+    }
+
+    void SetScene(Scene* s) {
+        _scene = s;
+    }
+
     void SetRenderFunction(std::function<void(void)> function)
     {
         _render_function = function;
@@ -90,13 +97,18 @@ public:
         // Set the required callback functions
         glfwSetKeyCallback(_window, key_callback);
 
-        while (!glfwWindowShouldClose(_window))
+        while (!glfwWindowShouldClose(_window)) // отделить эти штуки
         {
             // Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 
+            auto now = std::chrono::steady_clock::now();
+            std::chrono::duration<float> delta_time = now - m_last_time;
+            m_last_time = now;
 
-            // Render
-            _render_function();
+            if(_scene) {
+                _scene->Draw();
+                _scene->Update(delta_time.count());
+            }
 
             // Swap the screen buffers
             glfwSwapBuffers(_window);
@@ -105,14 +117,24 @@ public:
         }
     }
 
-    void Stop()
-    {
-
-    }
 
     void GetFrameBufferSize(int* width, int* height) {
         glfwGetFramebufferSize(_window, width, height);
     }
+
+private:
+    GLFWwindow* _window = nullptr;
+    GLFWmonitor* _monitor = nullptr;
+    size_t _height;
+    size_t _width;
+    std::string _name;
+    std::function<void(void)> _render_function; // сделать ее указателем на метод класса RenderBase::Render
+
+    Scene* _scene = nullptr;
+    std::chrono::steady_clock::time_point m_last_time = std::chrono::steady_clock::now();
+
+
+
 
 };
 

@@ -42,26 +42,37 @@ set(SOURCES src/main.cpp
    src/engine/shader/shader.h
    src/engine/scene/scene.h
    src/engine/scene/scene.cpp
+   src/engine/scene/mesh.h
+   src/engine/scene/mesh.cpp
+
    )
 
 set(SHADERS src/shaders/default.vert
     src/shaders/default.frag
     )
 
-add_executable(somethingdraw ${SOURCES} ${SHADERS})
+add_executable(pong_the_game ${SOURCES} ${SHADERS})
 
-set_target_properties(somethingdraw PROPERTIES
+set_target_properties(pong_the_game PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
     COMPILE_OPTIONS -Wall -Wextra -Wpedantic
 )
 
+add_custom_command(TARGET pong_the_game PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND}
+                   -E copy_directory
+                   ${CMAKE_SOURCE_DIR}/src/shaders/
+                   ${CMAKE_CURRENT_BINARY_DIR}/shaders)
 
+#file(COPY ${CMAKE_SOURCE_DIR}/src/shaders/ DESTINATION ${CMAKE_BUILD_DIRECTORY}/shaders)
 
 if(WIN32)
-    target_link_libraries(somethingdraw glew32s glfw3 opengl32)
+    target_link_libraries(pong_the_game glew32s glfw3 opengl32)
 
 elseif(UNIX)
-    target_link_libraries(somethingdraw GLEW::GLEW ${OPENGL_gl_LIBRARY} ${GLFW_LIBRARIES})
+    target_link_libraries(pong_the_game GLEW::GLEW ${OPENGL_gl_LIBRARY} ${GLFW_LIBRARIES})
 
 endif()
+
+
