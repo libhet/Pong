@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MESH_H
+#define MESH_H
 
 #include <vector>
 #include <glm/vec3.hpp>
@@ -33,3 +34,5 @@ namespace primitives {
         return mesh;
     }();
 }
+
+#endif // MESH_H

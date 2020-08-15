@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COLOR_H
+#define COLOR_H
 
 struct Color {
     constexpr Color(float red, float green, float blue, float alpha)
@@ -9,3 +10,6 @@ struct Color {
 
     float r, g, b, a;
 };
+
+
+#endif // COLOR_H
