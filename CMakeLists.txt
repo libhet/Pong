@@ -34,12 +34,13 @@ elseif(UNIX)
 endif()
 
 set(SOURCES src/main.cpp
-   src/engine/window/main_window.h
-   src/engine/window/main_window.cpp
+   src/engine/display/display.h
+   src/engine/display/display.cpp
    src/engine/types/color.h
    src/engine/types/color.cpp
    src/engine/style/colors.h
    src/engine/shader/shader.h
+   src/engine/shader/shader.cpp
    src/engine/scene/scene.h
    src/engine/scene/scene.cpp
    src/engine/scene/mesh.h
@@ -74,5 +75,6 @@ elseif(UNIX)
     target_link_libraries(pong_the_game GLEW::GLEW ${OPENGL_gl_LIBRARY} ${GLFW_LIBRARIES})
 
 endif()
+
 
 

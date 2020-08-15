@@ -1,5 +1,5 @@
 #include <iostream>
-#include "engine/window/main_window.h"
+#include "engine/display/display.h"
 #include "engine/style/colors.h"
 #include "engine/shader/shader.h"
 
