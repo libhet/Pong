@@ -9,7 +9,7 @@ GLfloat lineVertices[] = {
     200,200,0
 };
 
-
+using namespace drw;
 
 int main()
 {
@@ -23,7 +23,7 @@ int main()
     auto d = drw::color::Flame;
 
     auto scene = new Scene("main", &default_shader);
-    auto background = scene->get_root();
+    auto background = scene->GetRoot();
     background->transform.Scale(900, 600);
 //    background->transform.Translate(2,0);
     background->SetColor(niagara);

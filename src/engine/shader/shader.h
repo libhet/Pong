@@ -1,17 +1,11 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
+#include "../render_open_gl.h"
 
-// GLEW
-#define GLEW_STATIC
-#include <GL/glew.h>
 
-// GLFW
-#include <GLFW/glfw3.h>
+namespace drw {
+
 
 class Shader {
 public:
@@ -23,8 +17,6 @@ public:
 };
 
 
-
-
-
+} // drw
 
 #endif // SHADER_H

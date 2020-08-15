@@ -1,6 +1,11 @@
 #include "shader.h"
 
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
+namespace drw {
 
 Shader::Shader(const GLchar *vertexPath, const GLchar *fragmentPath) {
     std::string vertexCode;
@@ -82,4 +87,6 @@ GLint Shader::GetUniformLocation(const GLchar *name) {
     }
 
     return uniformLocation;
+}
+
 }

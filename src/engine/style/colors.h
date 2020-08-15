@@ -4,8 +4,6 @@
 
 namespace drw {
 
-namespace  {
-
 namespace color {
 
 const Color PrimroseYellow(246,210,88);
@@ -19,8 +17,6 @@ const Color PinkYarrow(208,48,118);
 const Color Niagara(85,134,164);
 const Color Kale(92,113,72);
 const Color LapisBlue(12,76,138);
-
-}
 
 }
 

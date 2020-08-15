@@ -1,6 +1,9 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+namespace drw {
+
+
 struct Color {
     constexpr Color(float red, float green, float blue, float alpha)
         : r{red}, g{green}, b{blue}, a{alpha} {}
@@ -11,5 +14,6 @@ struct Color {
     float r, g, b, a;
 };
 
+} // drw
 
 #endif // COLOR_H

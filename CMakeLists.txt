@@ -34,6 +34,7 @@ elseif(UNIX)
 endif()
 
 set(SOURCES src/main.cpp
+   src/engine/render_open_gl.h
    src/engine/display/display.h
    src/engine/display/display.cpp
    src/engine/types/color.h
