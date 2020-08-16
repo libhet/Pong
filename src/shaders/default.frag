@@ -6,7 +6,8 @@ uniform vec3 ourColor;
 
 void main()
 {
-   color = vec4(ourColor, 1.0);
+   vec3 color1 = ourColor;
+   color = vec4(color1, 1.0);
 }
 
 

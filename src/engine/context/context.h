@@ -17,8 +17,6 @@
 namespace drw {
 
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-
 enum class DisplayMode {
     WINDOWED = 0,
     FULLSCREEN,
@@ -40,10 +38,7 @@ public:
         m_update_fun = fun;
     }
 
-    void SetControl(drw::Control& control) {
-        m_control = &control.GetInstance(nullptr);
-        glfwSetKeyCallback(m_window, &std::remove_reference_t<decltype(*m_control)>::KeyCallback);
-    }
+    void SetControl(drw::Control& control);
 
 private:
     GLFWwindow* m_window = nullptr;

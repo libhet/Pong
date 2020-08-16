@@ -111,15 +111,6 @@ void SceneObject::DrawChildren() {
     }
 }
 
-//void SceneObject::UpdateItself(float dt) {
-
-//}
-
-//void SceneObject::UpdateChildren(float dt) {
-//    for(const auto& child : m_children) {
-//        child->Update(dt);
-//    }
-//}
 
 Scene::Scene(const char *scene_name, Shader *default_shader) {
     m_scene_name = scene_name;
@@ -130,9 +121,6 @@ void Scene::Draw() {
     if (m_root) m_root->Draw();
 }
 
-//void Scene::Update(float dt) {
-//    if (m_root) m_root->Update(dt);
-//}
 
 SceneObject *Scene::GetRoot() {
     return m_root.get();

@@ -11,6 +11,7 @@
 #include <string>
 #include <algorithm>
 #include <memory>
+#include <unordered_map>
 
 namespace drw {
 class Context;
@@ -51,10 +52,6 @@ public:
         m_context->SetControl(T::GetInstance(this));
     }
 
-    /**
-     * @brief Start
-     * Runs game loop.
-     */
     void Start();
 
 private:
@@ -63,6 +60,7 @@ private:
 private:
     std::vector<drw::ScenePtr> m_scenes;
     std::vector<GameObjectPtr> m_game_objects;
+    std::unordered_map<std::string, drw::ShaderPtr> m_shaders;
     drw::ScenePtr m_current_scene = nullptr;
     drw::ContextPtr m_context;
     size_t m_width, m_height;

@@ -2,11 +2,6 @@
 
 namespace drw {
 
-void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode)
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GL_TRUE);
-}
 
 Context::Context(size_t width, size_t height, const char *name, DisplayMode mode)
     : m_height(height), m_width(width), m_name(name)
@@ -60,8 +55,6 @@ void Context::SetScene(const ScenePtr& scene) {
 
 void Context::Start()
 {
-    // Set the required callback functions
-//    glfwSetKeyCallback(m_window, key_callback);
 
     while (!glfwWindowShouldClose(m_window)) // отделить эти штуки
     {
@@ -81,6 +74,11 @@ void Context::Start()
 
 void Context::GetFrameBufferSize(int *width, int *height) {
     glfwGetFramebufferSize(m_window, width, height);
+}
+
+void Context::SetControl(Control &control) {
+    m_control = &control.GetInstance(nullptr);
+    glfwSetKeyCallback(m_window, &std::remove_reference_t<decltype(*m_control)>::KeyCallback);
 }
 
 

@@ -11,6 +11,8 @@ struct Color {
     constexpr Color(int red, int green, int blue)
         : r{red/255.f}, g{green/255.f}, b{blue/255.f}, a{1.f} {}
 
+    Color(const Color& other) = default;
+
     float r, g, b, a;
 };
 

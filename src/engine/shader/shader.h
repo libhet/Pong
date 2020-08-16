@@ -2,7 +2,7 @@
 #define SHADER_H
 
 #include "../render_open_gl.h"
-
+#include <memory>
 
 namespace drw {
 
@@ -16,6 +16,7 @@ public:
     GLint GetUniformLocation(const GLchar * name);
 };
 
+using ShaderPtr = std::shared_ptr<Shader>;
 
 } // drw
 

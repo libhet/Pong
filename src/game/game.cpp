@@ -9,19 +9,21 @@ Game::Game(size_t width, size_t height, const std::string& game_name) {
     m_context = std::make_unique<drw::Context>(width, height, game_name.c_str(), drw::DisplayMode::WINDOWED);
 
     // You can create shader only after context created
-    drw::Shader default_shader = drw::Shader("shaders/default.vert", "shaders/default.frag");
+    auto default_shader = std::make_shared<drw::Shader>("shaders/default.vert", "shaders/default.frag");
+    m_shaders.insert(std::make_pair("default_shader", default_shader));
 
-    auto niagara = drw::color::Niagara;
-    auto c = drw::color::PrimroseYellow;
-    auto d = drw::color::Flame;
+//    auto niagara = drw::color::Niagara;
+//    auto c = drw::color::PrimroseYellow;
+//    auto d = drw::color::Flame;
 
-    auto scene = std::make_shared<drw::Scene>("main_scene", &default_shader);
+    auto scene = std::make_shared<drw::Scene>("main_scene", default_shader.get());
     m_current_scene = scene;
 
     auto background = scene->GetRoot();
     background->transform.Scale(width, height);
     //    background->transform.Translate(2,0);
-    background->SetColor(niagara);
+    auto l= drw::color::Kale;
+    background->SetColor(l);
     m_context->SetScene(scene);
 
 }
@@ -59,7 +61,7 @@ void Game::Update() {
         game_object->Update(delta_time.count());
     }
 
-    // Check
+    // Check scene switching
 }
 
 void GameObject::SetPosition(const Vec2f &pos) {
