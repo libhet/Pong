@@ -34,6 +34,8 @@ elseif(UNIX)
 endif()
 
 set(SOURCES src/main.cpp
+    src/pong.cpp
+    src/pong.h
    src/engine/render_open_gl.h
    src/engine/context/context.h
    src/engine/context/context.cpp

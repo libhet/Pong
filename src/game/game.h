@@ -24,13 +24,23 @@ class Game;
 
 class GameObject {
 public:
+    GameObject(const Game *game, const std::string &name)
+        :  m_game(game), m_name(name)
+    {}
+
     virtual void Update(float dt) = 0;
 
-    void SetPosition(const Vec2f& pos);
+    void SetPosition(const Vec2f &pos);
 
-    void SetAngle(const Real& pos);
+    void SetAngle(const Real &pos);
 
-private:
+    void SetGame(const Game *game);
+
+    drw::SceneObjectPtr SceneObject() const;
+
+protected:
+    const Game *m_game = nullptr;
+    std::string m_name;
     drw::SceneObjectPtr m_scene_object = nullptr;
 
     Vec2f m_position = Vec2f(0);
@@ -54,10 +64,18 @@ public:
 
     void Start();
 
-private:
-    void Update();
+    drw::ScenePtr GetScene(const std::string &scene_name);
 
-private:
+    GameObjectPtr AddGameObject(const GameObjectPtr &game_object);
+
+    drw::ShaderPtr GetShader(const std::string &shader_name) const {
+        return m_shaders.at(shader_name);
+    }
+
+protected:
+    virtual void Update();
+
+protected:
     std::vector<drw::ScenePtr> m_scenes;
     std::vector<GameObjectPtr> m_game_objects;
     std::unordered_map<std::string, drw::ShaderPtr> m_shaders;

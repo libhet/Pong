@@ -28,24 +28,18 @@ public:
     glm::mat4 matrix = glm::mat4(1.f);
 };
 
-class Projection {
-    Projection() {
-
-    }
-
-    glm::mat4 matrix = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f );
-};
+class Scene;
 
 class SceneObject {
 
 public:
-    SceneObject(Shader* shader, std::vector<Vertex> &vertices, std::vector<GLuint> &indices);
-    SceneObject(Shader* shader, Mesh &mesh);
+    SceneObject(Shader *shader, std::vector<Vertex> &vertices, std::vector<GLuint> &indices);
+    SceneObject(Shader *shader, Mesh &mesh);
 
-    void SetColor(Color& color);
+    void SetColor(Color &color);
     void AddChild(const std::shared_ptr<SceneObject> &scene_object);
     void Draw();
-//    void Update(float dt);
+    void SetScene(Scene *scene);
 
 private:
     void InitRender();
@@ -60,6 +54,7 @@ private:
     std::vector<Vertex> m_vertices;
     std::vector<GLuint> m_indices;
 
+    Scene * m_scene = nullptr;
     Shader* m_shader = nullptr;
 
     std::string m_name;
@@ -74,21 +69,27 @@ private:
 };
 
 using SceneObjectPtr = std::shared_ptr<SceneObject>;
+using SceneObjectUPtr = std::unique_ptr<SceneObject>;
 
 
 class Scene {
 
 public:
-    Scene(const char * scene_name, Shader* default_shader);
+    Scene(const char * scene_name, size_t width, size_t height, Shader* default_shader);
 
     void Draw();
 
     SceneObject* GetRoot();
+    void SetRoot(const SceneObjectPtr &scene_object);
     const std::string &GetSceneName();
+
+    size_t Width() {return m_width;}
+    size_t Height() {return m_height;}
 
 private:
     std::string m_scene_name;
-    std::unique_ptr<SceneObject> m_root = nullptr;
+    size_t m_width, m_height;
+    SceneObjectPtr m_root;
 };
 
 using ScenePtr = std::shared_ptr<Scene>;

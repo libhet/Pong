@@ -44,6 +44,7 @@ void SceneObject::SetColor(Color &color) {
 
 void SceneObject::AddChild(const std::shared_ptr<SceneObject> &scene_object)
 {
+    scene_object->SetScene(m_scene);
     m_children.push_back(scene_object);
 }
 
@@ -51,6 +52,11 @@ void SceneObject::AddChild(const std::shared_ptr<SceneObject> &scene_object)
 void SceneObject::Draw() {
     DrawItself();
     DrawChildren();
+}
+
+void SceneObject::SetScene(Scene *scene)
+{
+    m_scene = scene;
 }
 
 //void SceneObject::Update(float dt) {
@@ -112,9 +118,12 @@ void SceneObject::DrawChildren() {
 }
 
 
-Scene::Scene(const char *scene_name, Shader *default_shader) {
+Scene::Scene(const char *scene_name, size_t width, size_t height,Shader *default_shader) {
     m_scene_name = scene_name;
-    m_root = std::make_unique<SceneObject>(default_shader, primitives::square);
+    m_width = width;
+    m_height = height;
+    auto root = std::make_shared<SceneObject>(default_shader, primitives::square);
+    SetRoot(root);
 }
 
 void Scene::Draw() {
@@ -124,6 +133,12 @@ void Scene::Draw() {
 
 SceneObject *Scene::GetRoot() {
     return m_root.get();
+}
+
+void Scene::SetRoot(const SceneObjectPtr & scene_object)
+{
+    scene_object->SetScene(this);
+    m_root = scene_object;
 }
 
 const std::string &Scene::GetSceneName() {

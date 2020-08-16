@@ -5,6 +5,8 @@
 //#include "engine/context/context.h"
 #include "engine/control/control.h"
 
+#include "pong.h"
+
 
 GLfloat lineVertices[] = {
     100,100,0,
@@ -12,6 +14,8 @@ GLfloat lineVertices[] = {
 };
 
 using namespace drw;
+
+
 
 int main()
 {
@@ -32,10 +36,13 @@ int main()
 //    display.SetScene(scene);
 //    display.Start();
 
-    auto game = game::Game(900, 600, "Pong");
+//    auto game = game::Game(900, 600, "Pong");
+//    game.SetControl<drw::Control>();
+//    game.Start();
+
+    auto game = Pong(900, 600, "Pong");
     game.SetControl<drw::Control>();
     game.Start();
-
 
     return 0;
 }

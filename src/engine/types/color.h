@@ -5,6 +5,13 @@ namespace drw {
 
 
 struct Color {
+    Color() {
+        r = 1;
+        g = 1;
+        b = 1;
+        a = 1;
+    }
+
     constexpr Color(float red, float green, float blue, float alpha)
         : r{red}, g{green}, b{blue}, a{alpha} {}
 
