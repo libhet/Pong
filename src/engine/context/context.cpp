@@ -1,4 +1,4 @@
-#include "display.h"
+#include "context.h"
 
 namespace drw {
 
@@ -8,8 +8,8 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
         glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-Display::Display(size_t width, size_t height, const char *name, DisplayMode mode)
-    : _height(height), _width(width), _name(name)
+Context::Context(size_t width, size_t height, const char *name, DisplayMode mode)
+    : m_height(height), m_width(width), m_name(name)
 {
     glfwInit();
     // Set all the required options for GLFW
@@ -19,19 +19,19 @@ Display::Display(size_t width, size_t height, const char *name, DisplayMode mode
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     if(mode == DisplayMode::FULLSCREEN) {
-        _monitor = glfwGetPrimaryMonitor();
+        m_monitor = glfwGetPrimaryMonitor();
     }
 
-    _window = glfwCreateWindow(_width, _height, name, _monitor, nullptr);
+    m_window = glfwCreateWindow(m_width, m_height, name, m_monitor, nullptr);
 
-    if (_window == nullptr)
+    if (m_window == nullptr)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
     }
 
     // -!- We have to create context before glewInit()
-    glfwMakeContextCurrent(_window);
+    glfwMakeContextCurrent(m_window);
 
     // Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
     glewExperimental = GL_TRUE;
@@ -49,43 +49,38 @@ Display::Display(size_t width, size_t height, const char *name, DisplayMode mode
     glViewport(0, 0, w, h);
 }
 
-Display::~Display() {
+Context::~Context() {
     glfwTerminate();
 }
 
-void Display::SetScene(Scene *s) {
-    _scene = s;
+void Context::SetScene(const ScenePtr& scene) {
+    m_scene = scene;
 }
 
 
-void Display::Start()
+void Context::Start()
 {
-
     // Set the required callback functions
-    glfwSetKeyCallback(_window, key_callback);
+//    glfwSetKeyCallback(m_window, key_callback);
 
-    while (!glfwWindowShouldClose(_window)) // отделить эти штуки
+    while (!glfwWindowShouldClose(m_window)) // отделить эти штуки
     {
-        // Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 
-        auto now = std::chrono::steady_clock::now();
-        std::chrono::duration<float> delta_time = now - m_last_time;
-        m_last_time = now;
-
-        if(_scene) {
-            _scene->Draw();
-            _scene->Update(delta_time.count());
+        if(m_scene) {
+            m_scene->Draw();
         }
 
+        if (m_update_fun) m_update_fun();
+
         // Swap the screen buffers
-        glfwSwapBuffers(_window);
+        glfwSwapBuffers(m_window);
 
         glfwPollEvents();
     }
 }
 
-void Display::GetFrameBufferSize(int *width, int *height) {
-    glfwGetFramebufferSize(_window, width, height);
+void Context::GetFrameBufferSize(int *width, int *height) {
+    glfwGetFramebufferSize(m_window, width, height);
 }
 
 

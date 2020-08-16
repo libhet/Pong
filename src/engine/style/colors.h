@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COLORS_H
+#define COLORS_H
 
 #include "../types/color.h"
 
@@ -21,3 +22,6 @@ const Color LapisBlue(12,76,138);
 }
 
 }
+
+
+#endif // COLORS_H

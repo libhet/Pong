@@ -43,17 +43,14 @@ public:
     SceneObject(Shader* shader, Mesh &mesh);
 
     void SetColor(Color& color);
-    void AddChild();
+    void AddChild(const std::shared_ptr<SceneObject> &scene_object);
     void Draw();
-    void Update(float dt);
+//    void Update(float dt);
 
 private:
     void InitRender();
     void DrawItself();
     void DrawChildren();
-    void UpdateItself(float dt);
-    void UpdateChildren(float dt);
-
 
 public:
     Transformation transform;
@@ -67,7 +64,7 @@ private:
 
     std::string m_name;
 
-    std::vector<SceneObject*> m_children;
+    std::vector<std::shared_ptr<SceneObject>> m_children;
 
     Color m_color = Color(1,1,1,1);
 
@@ -76,20 +73,25 @@ private:
 
 };
 
+using SceneObjectPtr = std::shared_ptr<SceneObject>;
+
+
 class Scene {
 
 public:
     Scene(const char * scene_name, Shader* default_shader);
 
     void Draw();
-    void Update(float dt);
 
     SceneObject* GetRoot();
+    const std::string &GetSceneName();
 
 private:
     std::string m_scene_name;
     std::unique_ptr<SceneObject> m_root = nullptr;
 };
+
+using ScenePtr = std::shared_ptr<Scene>;
 
 }
 

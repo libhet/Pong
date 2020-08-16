@@ -35,8 +35,8 @@ endif()
 
 set(SOURCES src/main.cpp
    src/engine/render_open_gl.h
-   src/engine/display/display.h
-   src/engine/display/display.cpp
+   src/engine/context/context.h
+   src/engine/context/context.cpp
    src/engine/types/color.h
    src/engine/types/color.cpp
    src/engine/style/colors.h
@@ -46,7 +46,11 @@ set(SOURCES src/main.cpp
    src/engine/scene/scene.cpp
    src/engine/scene/mesh.h
    src/engine/scene/mesh.cpp
-
+   src/engine/control/control.h
+   src/engine/control/control.cpp
+   src/game/game.h
+   src/game/game.cpp
+   src/game/types.h
    )
 
 set(SHADERS src/shaders/default.vert

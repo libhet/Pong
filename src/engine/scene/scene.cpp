@@ -42,19 +42,21 @@ void SceneObject::SetColor(Color &color) {
     m_color = color;
 }
 
-void SceneObject::AddChild() {
-
+void SceneObject::AddChild(const std::shared_ptr<SceneObject> &scene_object)
+{
+    m_children.push_back(scene_object);
 }
+
 
 void SceneObject::Draw() {
     DrawItself();
     DrawChildren();
 }
 
-void SceneObject::Update(float dt) {
-    UpdateItself(dt);
-    UpdateChildren(dt);
-}
+//void SceneObject::Update(float dt) {
+//    UpdateItself(dt);
+//    UpdateChildren(dt);
+//}
 
 void SceneObject::InitRender(){
     glGenVertexArrays(1, &VAO);
@@ -104,20 +106,20 @@ void SceneObject::DrawItself() {
 }
 
 void SceneObject::DrawChildren() {
-    for (SceneObject* child : m_children) {
+    for (const auto& child : m_children) {
         child->Draw();
     }
 }
 
-void SceneObject::UpdateItself(float dt) {
+//void SceneObject::UpdateItself(float dt) {
 
-}
+//}
 
-void SceneObject::UpdateChildren(float dt) {
-    for(SceneObject* const child : m_children) {
-        child->Update(dt);
-    }
-}
+//void SceneObject::UpdateChildren(float dt) {
+//    for(const auto& child : m_children) {
+//        child->Update(dt);
+//    }
+//}
 
 Scene::Scene(const char *scene_name, Shader *default_shader) {
     m_scene_name = scene_name;
@@ -128,12 +130,16 @@ void Scene::Draw() {
     if (m_root) m_root->Draw();
 }
 
-void Scene::Update(float dt) {
-    if (m_root) m_root->Update(dt);
-}
+//void Scene::Update(float dt) {
+//    if (m_root) m_root->Update(dt);
+//}
 
 SceneObject *Scene::GetRoot() {
     return m_root.get();
+}
+
+const std::string &Scene::GetSceneName() {
+    return m_scene_name;
 }
 
 }
