@@ -76,10 +76,7 @@ void Context::GetFrameBufferSize(int *width, int *height) {
     glfwGetFramebufferSize(m_window, width, height);
 }
 
-void Context::SetControl(Control &control) {
-    m_control = &control.GetInstance(nullptr);
-    glfwSetKeyCallback(m_window, &std::remove_reference_t<decltype(*m_control)>::KeyCallback);
-}
+
 
 
 

@@ -38,7 +38,10 @@ public:
         m_update_fun = fun;
     }
 
-    void SetControl(drw::Control& control);
+    template<typename T>
+    void SetControl(T& control) {
+        glfwSetKeyCallback(m_window, &std::remove_reference_t<T>::KeyCallback);
+    }
 
 private:
     GLFWwindow* m_window = nullptr;

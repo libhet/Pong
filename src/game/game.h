@@ -35,6 +35,9 @@ public:
     void SetAngle(const Real &pos);
 
     void SetGame(const Game *game);
+    const std::string &Name() {
+        return m_name;
+    }
 
     drw::SceneObjectPtr SceneObject() const;
 
@@ -68,9 +71,9 @@ public:
 
     GameObjectPtr AddGameObject(const GameObjectPtr &game_object);
 
-    drw::ShaderPtr GetShader(const std::string &shader_name) const {
-        return m_shaders.at(shader_name);
-    }
+    drw::ShaderPtr GetShader(const std::string &shader_name) const;
+
+    GameObjectPtr GetGameObject(const std::string &name);
 
 protected:
     virtual void Update();

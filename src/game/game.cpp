@@ -70,6 +70,22 @@ GameObjectPtr Game::AddGameObject(const GameObjectPtr &game_object) {
     return m_game_objects.back();
 }
 
+drw::ShaderPtr Game::GetShader(const std::string &shader_name) const {
+    return m_shaders.at(shader_name);
+}
+
+GameObjectPtr Game::GetGameObject(const std::string &name) {
+    auto object_it = std::find_if(std::begin(m_game_objects),
+                                  std::end(m_game_objects),
+                                  [&name](const GameObjectPtr& o){
+        return o->Name() == name;
+    });
+    if (object_it != std::end(m_game_objects)) {
+        return *object_it;
+    }
+    return nullptr;
+}
+
 void Game::Update() {
     auto now = Time::now();
     TimeDelta delta_time = now - m_last_time;

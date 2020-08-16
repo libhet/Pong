@@ -23,15 +23,15 @@ public:
         GetInstance(nullptr).KeyCallbackImpl(window, key, scancode, action, mode);  // a little hack
     }
 
-    static Control & GetInstance(const game::Game* game) {
+    static Control & GetInstance(game::Game* game) {
         static Control instance(game);
         return instance;
     }
 
     virtual ~Control() = default;
 
-private:
-    Control(const game::Game* game) : m_game(game) { }
+protected:
+    Control(game::Game* game) : m_game(game) { }
 
     Control(const Control& other) = delete;
     Control(const Control&& other) = delete;
@@ -39,7 +39,7 @@ private:
     Control& operator=(const Control& other) = delete;
     Control& operator=(const Control&& other) = delete;
 
-    const game::Game* m_game;
+    game::Game* m_game;
 };
 
 

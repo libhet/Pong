@@ -1,4 +1,5 @@
 #include "game/game.h"
+#include "engine/control/control.h"
 
 class Player : public game::GameObject {
 public:
@@ -7,9 +8,13 @@ public:
 
     void Update(float dt) override;
 
+    void SetSpeed(game::Vec2f speed) {
+        m_speed = speed;
+    }
+
 private:
     game::Vec2f m_start_pos;
-    game::Vec2f m_speed;
+    game::Vec2f m_speed = game::Vec2f(0);
     size_t m_width, m_height;
     drw::Color m_color;
 };
@@ -23,9 +28,53 @@ public:
 
 private:
     game::Vec2f m_start_pos;
-    game::Vec2f m_speed;
+    game::Vec2f m_speed = game::Vec2f(0);
     size_t m_radius;
     drw::Color m_color;
+};
+
+class PongControl : public drw::Control {
+public:
+    void KeyCallbackImpl(GLFWwindow* window, int key, int scancode, int action, int mode) override {
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+            glfwSetWindowShouldClose(window, GL_TRUE);
+
+        if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
+            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::Vec2f(0,400));
+        }
+
+        if (key == GLFW_KEY_UP && action == GLFW_RELEASE) {
+            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::Vec2f(0,0));
+        }
+
+        if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE) {
+            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::Vec2f(0,0));
+        }
+
+        if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
+            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::Vec2f(0,-400));
+        }
+    }
+
+    static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode) {
+        GetInstance(nullptr).KeyCallbackImpl(window, key, scancode, action, mode);  // a little hack
+    }
+
+    static PongControl & GetInstance(game::Game* game) {
+        static PongControl instance(game);
+        return instance;
+    }
+
+    virtual ~PongControl() = default;
+
+private:
+    PongControl(game::Game* game) : drw::Control(game) { }
+
+    PongControl(const PongControl& other) = delete;
+    PongControl(const PongControl&& other) = delete;
+
+    PongControl& operator=(const PongControl& other) = delete;
+    PongControl& operator=(const PongControl&& other) = delete;
 };
 
 class Pong : public game::Game {
@@ -44,3 +93,6 @@ public:
         root->AddChild(ball->SceneObject());
     }
 };
+
+
+

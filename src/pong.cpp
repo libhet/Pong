@@ -14,7 +14,7 @@ Player::Player(const game::Game *game, const std::string &name, game::Vec2f posi
 }
 
 void Player::Update(float dt) {
-    m_position = m_start_pos + m_speed * dt;
+    m_position += m_speed * dt;
 
     m_scene_object->transform.Reset();
     m_scene_object->transform.Translate(m_position.x, m_position.y);
