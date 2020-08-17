@@ -1,7 +1,7 @@
 # Pong
 The Game.
 
-## Dependecies:
+## Dependencies:
   GLEW, GLFW, glm
   
 For building you should create folder dependencies in the project directory. 
