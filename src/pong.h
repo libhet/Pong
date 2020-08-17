@@ -3,33 +3,33 @@
 
 class Player : public game::GameObject {
 public:
-    Player(const game::Game *game, const std::string &name) : game::GameObject(game, name) {}
-    Player(const game::Game *game, const std::string &name, game::Vec2f position, size_t width, size_t height, drw::Color color);
+    Player(game::Game *game, const std::string &name) : game::GameObject(game, name) {}
+    Player(game::Game *game, const std::string &name, game::vec2 position, size_t width, size_t height, drw::Color color);
 
     void Update(float dt) override;
 
-    void SetSpeed(game::Vec2f speed) {
+    void SetSpeed(game::vec2 speed) {
         m_speed = speed;
     }
 
 private:
-    game::Vec2f m_start_pos;
-    game::Vec2f m_speed = game::Vec2f(0);
-    size_t m_width, m_height;
+    game::vec2 m_start_pos;
+    game::vec2 m_speed = game::vec2(0);
+    int m_width, m_height;
     drw::Color m_color;
 };
 
 class Ball : public game::GameObject {
 public:
-    Ball(const game::Game *game, const std::string &name) : game::GameObject(game, name) {}
-    Ball(const game::Game *game, const std::string &name, game::Vec2f position, size_t radius, drw::Color color);
+    Ball(game::Game *game, const std::string &name) : game::GameObject(game, name) {}
+    Ball(game::Game *game, const std::string &name, game::vec2 position, size_t radius, drw::Color color);
 
     void Update(float dt) override;
 
 private:
-    game::Vec2f m_start_pos;
-    game::Vec2f m_speed = game::Vec2f(0);
-    size_t m_radius;
+    game::vec2 m_start_pos;
+    game::vec2 m_speed = game::vec2(0);
+    int m_radius;
     drw::Color m_color;
 };
 
@@ -40,19 +40,35 @@ public:
             glfwSetWindowShouldClose(window, GL_TRUE);
 
         if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
-            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::Vec2f(0,400));
+            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::vec2(0,400));
         }
 
         if (key == GLFW_KEY_UP && action == GLFW_RELEASE) {
-            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::Vec2f(0,0));
+            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::vec2(0,0));
         }
 
         if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE) {
-            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::Vec2f(0,0));
+            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::vec2(0,0));
         }
 
         if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
-            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::Vec2f(0,-400));
+            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::vec2(0,-400));
+        }
+
+        if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+            static_cast<Player*>(m_game->GetGameObject("player1").get())->SetSpeed(game::vec2(0,400));
+        }
+
+        if (key == GLFW_KEY_W && action == GLFW_RELEASE) {
+            static_cast<Player*>(m_game->GetGameObject("player1").get())->SetSpeed(game::vec2(0,0));
+        }
+
+        if (key == GLFW_KEY_S && action == GLFW_RELEASE) {
+            static_cast<Player*>(m_game->GetGameObject("player1").get())->SetSpeed(game::vec2(0,0));
+        }
+
+        if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+            static_cast<Player*>(m_game->GetGameObject("player1").get())->SetSpeed(game::vec2(0,-400));
         }
     }
 
@@ -82,9 +98,9 @@ public:
     Pong(size_t width, size_t height, const std::string& game_name)
         : game::Game(width, height, game_name)
     {
-        auto player_1 = AddGameObject(std::make_shared<Player>(this, "player1", game::Vec2f(400,0), 20, 100, drw::color::Flame));
-        auto player_2 = AddGameObject(std::make_shared<Player>(this, "player2", game::Vec2f(-400,0), 20, 100, drw::color::Flame));
-        auto ball = AddGameObject(std::make_shared<Ball>(this, "ball", game::Vec2f(0,0), 30, drw::color::PinkYarrow));
+        auto player_1 = AddGameObject(std::make_shared<Player>(this, "player1", game::vec2(400,0), 20, 100, drw::color::Flame));
+        auto player_2 = AddGameObject(std::make_shared<Player>(this, "player2", game::vec2(-400,0), 20, 100, drw::color::Flame));
+        auto ball = AddGameObject(std::make_shared<Ball>(this, "ball", game::vec2(0,0), 30, drw::color::PinkYarrow));
 
         auto main_scene = GetScene("main_scene");
         auto root = main_scene->GetRoot();

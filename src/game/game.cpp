@@ -99,15 +99,15 @@ void Game::Update() {
     // todo: Check scene switching
 }
 
-void GameObject::SetPosition(const Vec2f &pos) {
+void GameObject::SetPosition(const vec2 &pos) {
     m_position = pos;
 }
 
-void GameObject::SetAngle(const Real &pos) {
+void GameObject::SetAngle(const real &pos) {
     m_angle = pos;
 }
 
-void GameObject::SetGame(const Game *game) {
+void GameObject::SetGame(Game *game) {
     m_game = game;
 }
 

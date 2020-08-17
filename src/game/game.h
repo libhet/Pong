@@ -24,17 +24,17 @@ class Game;
 
 class GameObject {
 public:
-    GameObject(const Game *game, const std::string &name)
+    GameObject(Game *game, const std::string &name)
         :  m_game(game), m_name(name)
     {}
 
     virtual void Update(float dt) = 0;
 
-    void SetPosition(const Vec2f &pos);
+    void SetPosition(const vec2 &pos);
 
-    void SetAngle(const Real &pos);
+    void SetAngle(const real &pos);
 
-    void SetGame(const Game *game);
+    void SetGame(Game *game);
     const std::string &Name() {
         return m_name;
     }
@@ -42,12 +42,12 @@ public:
     drw::SceneObjectPtr SceneObject() const;
 
 protected:
-    const Game *m_game = nullptr;
+    Game *m_game = nullptr;
     std::string m_name;
     drw::SceneObjectPtr m_scene_object = nullptr;
 
-    Vec2f m_position = Vec2f(0);
-    Real  m_angle = Real(0);
+    vec2 m_position = vec2(0);
+    real  m_angle = real(0);
 };
 
 using GameObjectPtr = std::shared_ptr<GameObject>;
@@ -67,6 +67,9 @@ public:
 
     void Start();
 
+    size_t Width() const {return m_width;}
+    size_t Height() const {return m_height;}
+
     drw::ScenePtr GetScene(const std::string &scene_name);
 
     GameObjectPtr AddGameObject(const GameObjectPtr &game_object);
@@ -84,7 +87,7 @@ protected:
     std::unordered_map<std::string, drw::ShaderPtr> m_shaders;
     drw::ScenePtr m_current_scene = nullptr;
     drw::ContextPtr m_context;
-    size_t m_width, m_height;
+    int m_width, m_height;
     TimePoint m_last_time = Time::now();
 };
 
