@@ -29,6 +29,7 @@ Ball::Ball(const game::Game *game, const std::string &name, game::Vec2f position
     m_position = m_start_pos;
     m_scene_object = std::make_shared<drw::SceneObject>(m_game->GetShader("default_shader").get(), primitives::square);
     m_radius = radius;
+    m_color = color;
 }
 
 void Ball::Update(float dt) {
@@ -37,4 +38,5 @@ void Ball::Update(float dt) {
     m_scene_object->transform.Reset();
     m_scene_object->transform.Translate(m_position.x, m_position.y);
     m_scene_object->transform.Scale(m_radius);
+    m_scene_object->SetColor(m_color);
 }
