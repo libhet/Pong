@@ -36,6 +36,9 @@ private:
 class PongControl : public drw::Control {
 public:
     void KeyCallbackImpl(GLFWwindow* window, int key, int scancode, int action, int mode) override {
+        if (key == GLFW_KEY_UNKNOWN) {
+            key = scancode;
+        }
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
             glfwSetWindowShouldClose(window, GL_TRUE);
 
