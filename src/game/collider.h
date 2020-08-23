@@ -1,6 +1,13 @@
+#ifndef COLLIDER_H
+#define COLLIDER_H
+
 #include "types.h"
 #include <memory>
 #include <vector>
+#include <functional>
+
+namespace game {
+
 
 struct Rect {
     float x, y, width, height;
@@ -33,7 +40,16 @@ public:
                 rect1.y + rect1.height > rect2.y;
     }
 
+    void SetCollisionFunction(std::function<void(const CollideBox& other)> fun) {
+        m_collision_function = fun;
+    }
+
+    virtual void OnCollisionDetected(const CollideBox& other) {
+        if(m_collision_function) m_collision_function(other);
+    }
+
 private:
+    std::function<void(const CollideBox&)> m_collision_function;
     game::Vec2f& m_position;
     game::Vec2f m_dimensions;
 };
@@ -44,11 +60,39 @@ using CollideBoxWeakPtr = std::weak_ptr<CollideBox>;
 
 class Collider { // todo make singleton
 public:
-    Add
+    void AddBox(const CollideBoxPtr& box) {
+        m_collide_boxes.push_back(box);
+    }
 
     void Update() {
-        for
+        ResolveCollisions();
     }
+
+private:
+    void ResolveCollisions() { // bad algorithm
+        for(auto first_box = std::begin(m_collide_boxes); first_box != std::end(m_collide_boxes); ++first_box) {
+            for(auto second_box = std::begin(m_collide_boxes); second_box != std::end(m_collide_boxes); ++second_box) {
+                if(first_box != second_box) {
+                    auto pointer_to_first = first_box->lock();
+                    auto pointer_to_second = second_box->lock();
+                    if(pointer_to_first && pointer_to_second) {
+                        bool collision = pointer_to_first->CollideWith(*pointer_to_second.get());
+                        if(collision) {
+                            pointer_to_first->OnCollisionDetected(*pointer_to_second.get());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void RemoveUnactive() {
+
+    }
+
 private:
     std::vector<CollideBoxWeakPtr> m_collide_boxes;
 };
+
+}
+#endif // COLLIDER_H

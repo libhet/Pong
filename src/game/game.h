@@ -6,6 +6,7 @@
 #include "../engine/control/control.h"
 #include "../engine/shader/shader.h"
 #include "../engine/style/colors.h"
+#include "collider.h"
 #include "types.h"
 #include <vector>
 #include <string>
@@ -13,9 +14,11 @@
 #include <memory>
 #include <unordered_map>
 
+
 namespace drw {
 class Context;
 class Control;
+class Collider;
 using ContextPtr = std::unique_ptr<Context>;
 }
 
@@ -80,10 +83,13 @@ public:
 
     GameObjectPtr GetGameObject(const std::string &name);
 
+    Collider& Collider();
+
 protected:
     virtual void Update();
 
 protected:
+    game::Collider m_collider;
     drw::Control* m_control;
     std::vector<drw::ScenePtr> m_scenes;
     std::vector<GameObjectPtr> m_game_objects;

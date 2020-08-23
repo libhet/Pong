@@ -86,6 +86,8 @@ GameObjectPtr Game::GetGameObject(const std::string &name) {
     return nullptr;
 }
 
+Collider &Game::Collider() {return m_collider;}
+
 void Game::Update() {
     auto now = Time::now();
     TimeDelta delta_time = now - m_last_time;
@@ -96,8 +98,11 @@ void Game::Update() {
         game_object->Update(delta_time.count());
     }
 
+    m_collider.Update();
+
     // Update input
     if(m_control) m_control->HandleInput(delta_time.count());
+
 
     // todo: Check scene switching
 }

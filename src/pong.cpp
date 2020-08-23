@@ -10,12 +10,10 @@ Player::Player(game::Game *game, const std::string &name, game::Vec2f position, 
     m_width = width;
     m_height = height;
     m_color = color;
-
+    m_collide_box = std::make_shared<game::CollideBox>(m_position, game::Vec2f(20, 100));
 }
 
 void Player::Update(float dt) {
-//    m_position += m_speed * dt;
-
     int half_height = m_game->Height()/2;
     int limit_height = half_height - m_height/2;
 
@@ -36,10 +34,12 @@ Ball::Ball(game::Game *game, const std::string &name, game::Vec2f position, size
     m_scene_object = std::make_shared<drw::SceneObject>(m_game->GetShader("default_shader").get(), primitives::square);
     m_radius = radius;
     m_color = color;
+    m_collide_box = std::make_shared<game::CollideBox>(m_position, game::Vec2f(30, 30));
+    m_collide_box->SetCollisionFunction([this](const game::CollideBox& other){CollisionFunction(other);});
 }
 
 void Ball::Update(float dt) {
-    m_position = m_start_pos + m_speed * dt;
+    m_position = m_position + m_speed * dt;
 
 
     m_scene_object->transform.Reset();
