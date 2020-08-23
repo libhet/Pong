@@ -26,6 +26,7 @@ Game::Game(size_t width, size_t height, const std::string& game_name) {
     auto l= drw::color::Niagara;
     background->SetColor(l);
     m_context->SetScene(scene);
+    m_collider = std::make_shared<Collider>();
 
 }
 
@@ -86,7 +87,7 @@ GameObjectPtr Game::GetGameObject(const std::string &name) {
     return nullptr;
 }
 
-Collider &Game::Collider() {return m_collider;}
+Collider* Game::GetCollider() {return m_collider.get();}
 
 void Game::Update() {
     auto now = Time::now();
@@ -98,7 +99,7 @@ void Game::Update() {
         game_object->Update(delta_time.count());
     }
 
-    m_collider.Update();
+    m_collider->Update();
 
     // Update input
     if(m_control) m_control->HandleInput(delta_time.count());
@@ -117,6 +118,10 @@ void GameObject::SetAngle(const real &pos) {
 
 void GameObject::SetGame(Game *game) {
     m_game = game;
+}
+
+std::shared_ptr<CollideBox> GameObject::GetCollideBox() const {
+    return m_collide_box;
 }
 
 drw::SceneObjectPtr GameObject::SceneObject() const {

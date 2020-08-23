@@ -35,7 +35,7 @@ Ball::Ball(game::Game *game, const std::string &name, game::Vec2f position, size
     m_radius = radius;
     m_color = color;
     m_collide_box = std::make_shared<game::CollideBox>(m_position, game::Vec2f(30, 30));
-    m_collide_box->SetCollisionFunction([this](const game::CollideBox& other){CollisionFunction(other);});
+//    m_collide_box->SetCollisionFunction([this](const game::CollideBox& other){CollisionFunction(other);});
 }
 
 void Ball::Update(float dt) {
@@ -46,4 +46,22 @@ void Ball::Update(float dt) {
     m_scene_object->transform.Translate(m_position.x, m_position.y);
     m_scene_object->transform.Scale(m_radius);
     m_scene_object->SetColor(m_color);
+}
+
+Pong::Pong(size_t width, size_t height, const std::string &game_name)
+    : game::Game(width, height, game_name)
+{
+    auto player_1 = AddGameObject(std::make_shared<Player>(this, "player1", game::Vec2f(400,0), 20, 100, drw::color::Flame));
+    auto player_2 = AddGameObject(std::make_shared<Player>(this, "player2", game::Vec2f(-400,0), 20, 100, drw::color::Flame));
+    auto ball = AddGameObject(std::make_shared<Ball>(this, "ball", game::Vec2f(0,0), 30, drw::color::PinkYarrow));
+
+    GetCollider()->AddGameObject(player_1);
+    GetCollider()->AddGameObject(player_2);
+    GetCollider()->AddGameObject(ball);
+
+    auto main_scene = GetScene("main_scene");
+    auto root = main_scene->GetRoot();
+    root->AddChild(player_1->SceneObject());
+    root->AddChild(player_2->SceneObject());
+    root->AddChild(ball->SceneObject());
 }

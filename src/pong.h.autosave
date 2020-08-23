@@ -54,6 +54,7 @@ public:
 
     void OnCollisionDetected(const std::shared_ptr<GameObject>& other) override {
 //        std::cout << "Collision!" << std::endl;
+        other->
         m_speed = game::Vec2f(-1, -1) * m_speed;
     }
 

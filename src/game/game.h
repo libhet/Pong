@@ -6,25 +6,30 @@
 #include "../engine/control/control.h"
 #include "../engine/shader/shader.h"
 #include "../engine/style/colors.h"
-#include "collider.h"
 #include "types.h"
 #include <vector>
 #include <string>
 #include <algorithm>
 #include <memory>
 #include <unordered_map>
+#include "collider.h"
 
 
 namespace drw {
+
 class Context;
 class Control;
-class Collider;
+
+
 using ContextPtr = std::unique_ptr<Context>;
 }
 
 namespace game {
 
+class Collider;
+class CollideBox;
 class Game;
+//class GameObjectPtr;
 
 class GameObject {
 public:
@@ -43,6 +48,12 @@ public:
         return m_name;
     }
 
+    virtual void OnCollisionDetected(const std::shared_ptr<GameObject>& other) {
+
+    }
+
+    std::shared_ptr<CollideBox> GetCollideBox() const;
+
     drw::SceneObjectPtr SceneObject() const;
 
 protected:
@@ -52,9 +63,11 @@ protected:
 
     Vec2f m_position = Vec2f(0);
     real  m_angle = real(0);
+    std::shared_ptr<CollideBox> m_collide_box;
 };
 
 using GameObjectPtr = std::shared_ptr<GameObject>;
+using GameObjectWeakPtr = std::weak_ptr<GameObject>;
 
 
 class Game {
@@ -83,13 +96,13 @@ public:
 
     GameObjectPtr GetGameObject(const std::string &name);
 
-    Collider& Collider();
+    Collider* GetCollider();
 
 protected:
     virtual void Update();
 
 protected:
-    game::Collider m_collider;
+    std::shared_ptr<game::Collider> m_collider;  // todo replace pointer
     drw::Control* m_control;
     std::vector<drw::ScenePtr> m_scenes;
     std::vector<GameObjectPtr> m_game_objects;
