@@ -96,10 +96,13 @@ void Game::Update() {
         game_object->Update(delta_time.count());
     }
 
+    // Update input
+    if(m_control) m_control->HandleInput(delta_time.count());
+
     // todo: Check scene switching
 }
 
-void GameObject::SetPosition(const vec2 &pos) {
+void GameObject::SetPosition(const Vec2f &pos) {
     m_position = pos;
 }
 

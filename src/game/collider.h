@@ -8,7 +8,7 @@ struct Rect {
 
 class CollideBox {
 public:
-    CollideBox(game::vec2 &position, game::vec2 dimensions)
+    CollideBox(game::Vec2f &position, game::Vec2f dimensions)
         : m_position(position), m_dimensions(dimensions)
     {    }
 
@@ -34,8 +34,8 @@ public:
     }
 
 private:
-    game::vec2& m_position;
-    game::vec2 m_dimensions;
+    game::Vec2f& m_position;
+    game::Vec2f m_dimensions;
 };
 
 using CollideBoxPtr = std::shared_ptr<CollideBox>;

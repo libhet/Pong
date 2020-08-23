@@ -41,6 +41,7 @@ public:
     template<typename T>
     void SetControl(T& control) {
         glfwSetKeyCallback(m_window, &std::remove_reference_t<T>::KeyCallback);
+        m_control = &control;
     }
 
 private:

@@ -1,7 +1,7 @@
 #include "pong.h"
 #include "engine/scene/mesh.h"
 
-Player::Player(game::Game *game, const std::string &name, game::vec2 position, size_t width, size_t height, drw::Color color)
+Player::Player(game::Game *game, const std::string &name, game::Vec2f position, size_t width, size_t height, drw::Color color)
     : game::GameObject(game, name)
 {
     m_start_pos = position;
@@ -14,7 +14,7 @@ Player::Player(game::Game *game, const std::string &name, game::vec2 position, s
 }
 
 void Player::Update(float dt) {
-    m_position += m_speed * dt;
+//    m_position += m_speed * dt;
 
     int half_height = m_game->Height()/2;
     int limit_height = half_height - m_height/2;
@@ -28,7 +28,7 @@ void Player::Update(float dt) {
     m_scene_object->SetColor(m_color);
 }
 
-Ball::Ball(game::Game *game, const std::string &name, game::vec2 position, size_t radius, drw::Color color)
+Ball::Ball(game::Game *game, const std::string &name, game::Vec2f position, size_t radius, drw::Color color)
     : game::GameObject(game, name)
 {
     m_start_pos = position;
