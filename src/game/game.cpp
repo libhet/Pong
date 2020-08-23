@@ -96,6 +96,9 @@ void Game::Update() {
         game_object->Update(delta_time.count());
     }
 
+    // Update input
+    if(m_control) m_control->HandleInput(delta_time.count());
+
     // todo: Check scene switching
 }
 

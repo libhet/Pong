@@ -15,6 +15,7 @@
 
 namespace drw {
 class Context;
+class Control;
 using ContextPtr = std::unique_ptr<Context>;
 }
 
@@ -63,6 +64,7 @@ public:
     template<typename T>
     void SetControl() {
         m_context->SetControl(T::GetInstance(this));
+        m_control = &T::GetInstance(this);
     }
 
     void Start();
@@ -79,6 +81,7 @@ protected:
     virtual void Update();
 
 protected:
+    drw::Control* m_control;
     std::vector<drw::ScenePtr> m_scenes;
     std::vector<GameObjectPtr> m_game_objects;
     std::unordered_map<std::string, drw::ShaderPtr> m_shaders;

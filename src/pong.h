@@ -12,9 +12,21 @@ public:
         m_speed = speed;
     }
 
+    const game::Vec2f &GetSpeed() const {
+        return m_speed;
+    }
+
+    const game::Vec2f & GetPosition() const {
+        return m_position;
+    }
+
+    void SetPosition(const game::Vec2f & position) {
+        m_position = position;
+    }
+
 private:
     game::Vec2f m_start_pos;
-    game::Vec2f m_speed = game::Vec2f(0);
+    game::Vec2f m_speed = game::Vec2f(0, 400);
     size_t m_width, m_height;
     drw::Color m_color;
 };
@@ -36,24 +48,18 @@ private:
 class PongControl : public drw::Control {
 public:
     void KeyCallbackImpl(GLFWwindow* window, int key, int scancode, int action, int mode) override {
+        if (key == GLFW_KEY_UNKNOWN) return;
+
+        if(action == GLFW_PRESS) {
+            m_pressed[key] = true;
+        }
+        else if (action == GLFW_RELEASE) {
+            m_pressed[key] = false;
+        }
+
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
             glfwSetWindowShouldClose(window, GL_TRUE);
 
-        if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
-            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::Vec2f(0,400));
-        }
-
-        if (key == GLFW_KEY_UP && action == GLFW_RELEASE) {
-            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::Vec2f(0,0));
-        }
-
-        if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE) {
-            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::Vec2f(0,0));
-        }
-
-        if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
-            static_cast<Player*>(m_game->GetGameObject("player2").get())->SetSpeed(game::Vec2f(0,-400));
-        }
     }
 
     static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode) {
@@ -65,7 +71,53 @@ public:
         return instance;
     }
 
-    virtual ~PongControl() = default;
+    void HandleInput(float dt) override {
+
+        for(auto key = 0; key < MAX_KEYS; ++key) {
+            if(!m_pressed[key]) {
+                continue;
+            }
+
+            HandleInput_Player1(key, dt, static_cast<Player*>(m_game->GetGameObject("player1").get()));
+            HandleInput_Player2(key, dt, static_cast<Player*>(m_game->GetGameObject("player2").get()));
+        }
+
+    }
+
+    ~PongControl() = default;
+
+private:
+    void HandleInput_Player1(int key, float dt, Player* player) {
+        auto position = player->GetPosition();
+        auto speed = player->GetSpeed();
+        switch (key) {
+            case GLFW_KEY_UP:
+            position = position + ( speed * dt * UP_DIRECTION);
+            player->SetPosition(position);
+            break;
+
+            case GLFW_KEY_DOWN:
+            position = position + (speed * dt * DOWN_DIRECTION);
+            player->SetPosition(position);
+            break;
+        }
+    }
+
+    void HandleInput_Player2(int key, float dt, Player* player) {
+        auto position = player->GetPosition();
+        auto speed = player->GetSpeed();
+        switch (key) {
+            case GLFW_KEY_W:
+            position = position + (speed * dt * UP_DIRECTION);
+            player->SetPosition(position);
+            break;
+
+            case GLFW_KEY_S:
+            position = position + (speed * dt * DOWN_DIRECTION);
+            player->SetPosition(position);
+            break;
+        }
+    }
 
 private:
     PongControl(game::Game* game) : drw::Control(game) { }
@@ -75,6 +127,10 @@ private:
 
     PongControl& operator=(const PongControl& other) = delete;
     PongControl& operator=(const PongControl&& other) = delete;
+
+protected:
+    const game::Vec2f UP_DIRECTION = game::Vec2f(0, 1);
+    const game::Vec2f DOWN_DIRECTION = game::Vec2f(0, -1);
 };
 
 class Pong : public game::Game {

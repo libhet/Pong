@@ -28,7 +28,11 @@ public:
         return instance;
     }
 
+    virtual void HandleInput(float dt) {}
+
     virtual ~Control() = default;
+
+    const static int MAX_KEYS = GLFW_KEY_LAST + 1;
 
 protected:
     Control(game::Game* game) : m_game(game) { }
@@ -40,6 +44,7 @@ protected:
     Control& operator=(const Control&& other) = delete;
 
     game::Game* m_game;
+    bool m_pressed[MAX_KEYS] = {false};
 };
 
 
