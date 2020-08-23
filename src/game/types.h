@@ -7,7 +7,7 @@
 namespace game {
 
 using Vec2f = glm::vec2;
-using Real = float;
+using real = float;
 
 using Time = std::chrono::steady_clock;
 using TimePoint = std::chrono::steady_clock::time_point;

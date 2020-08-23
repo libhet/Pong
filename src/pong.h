@@ -1,10 +1,16 @@
 #include "game/game.h"
+#include "game/collider.h"
+#include "game/types.h"
 #include "engine/control/control.h"
+#include "glm/gtx/projection.hpp"
+
+using namespace game;
+
 
 class Player : public game::GameObject {
 public:
-    Player(const game::Game *game, const std::string &name) : game::GameObject(game, name) {}
-    Player(const game::Game *game, const std::string &name, game::Vec2f position, size_t width, size_t height, drw::Color color);
+    Player(game::Game *game, const std::string &name) : game::GameObject(game, name) {}
+    Player(game::Game *game, const std::string &name, game::Vec2f position, size_t width, size_t height, drw::Color color);
 
     void Update(float dt) override;
 
@@ -31,19 +37,66 @@ private:
     drw::Color m_color;
 };
 
+using PLayerPtr = std::shared_ptr<Player>;
+
+class Border : public game::GameObject {
+public:
+    Border(game::Game *game, const std::string &name, game::Vec2f position, size_t width, size_t height)
+        : game::GameObject(game, name)
+    {
+        m_position = position;
+        m_width = width;
+        m_height = height;
+        m_collide_box = std::make_shared<game::CollideBox>(m_position, game::Vec2f(width, height));
+    }
+
+    void Update(float dt) override {}
+
+private:
+    int m_width, m_height;
+};
+
 class Ball : public game::GameObject {
 public:
-    Ball(const game::Game *game, const std::string &name) : game::GameObject(game, name) {}
-    Ball(const game::Game *game, const std::string &name, game::Vec2f position, size_t radius, drw::Color color);
+    Ball(game::Game *game, const std::string &name) : game::GameObject(game, name) {}
+    Ball(game::Game *game, const std::string &name, game::Vec2f position, size_t radius, drw::Color color);
 
     void Update(float dt) override;
 
+    CollideBoxPtr CollideBox() const {
+        return m_collide_box;
+    }
+
+    void OnCollisionDetected(const std::shared_ptr<GameObject>& other) override {
+//        std::cout << "Collision!" << std::endl;
+        auto player = dynamic_cast<Player*>(other.get());
+        auto border = dynamic_cast<Border*>(other.get());
+
+        if(player) {
+            auto player_pos = player->GetPosition();
+            Vec2f norm = Vec2f(player_pos.x > 0 ? -1 : 1,  0);
+            auto proj = glm::proj(m_speed, norm);
+            m_speed =  m_speed - 2.f * proj + game::Vec2f(0.25, 0.25) * player->GetSpeed();
+        }
+
+        if(border) {
+            auto border_pos = border->GetPosition();
+            Vec2f norm = Vec2f( border_pos.x ? border_pos.x > 0 ? -1 : 1 : 0,  border_pos.y ? border_pos.x > 0 ? -1 : 1 : 0);
+            auto proj = glm::proj(m_speed, norm);
+            m_speed =  m_speed - 2.f * proj;
+        }
+    }
+
 private:
     game::Vec2f m_start_pos;
-    game::Vec2f m_speed = game::Vec2f(0);
-    size_t m_radius;
+    game::Vec2f m_speed = game::Vec2f(200, 0);
+    int m_radius;
     drw::Color m_color;
 };
+
+using BallPtr = std::shared_ptr<Ball>;
+
+
 
 class PongControl : public drw::Control {
 public:
@@ -135,19 +188,7 @@ protected:
 
 class Pong : public game::Game {
 public:
-    Pong(size_t width, size_t height, const std::string& game_name)
-        : game::Game(width, height, game_name)
-    {
-        auto player_1 = AddGameObject(std::make_shared<Player>(this, "player1", game::Vec2f(400,0), 20, 100, drw::color::Flame));
-        auto player_2 = AddGameObject(std::make_shared<Player>(this, "player2", game::Vec2f(-400,0), 20, 100, drw::color::Flame));
-        auto ball = AddGameObject(std::make_shared<Ball>(this, "ball", game::Vec2f(0,0), 30, drw::color::PinkYarrow));
-
-        auto main_scene = GetScene("main_scene");
-        auto root = main_scene->GetRoot();
-        root->AddChild(player_1->SceneObject());
-        root->AddChild(player_2->SceneObject());
-        root->AddChild(ball->SceneObject());
-    }
+    Pong(size_t width, size_t height, const std::string& game_name);
 };
 
 

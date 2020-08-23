@@ -53,6 +53,8 @@ set(SOURCES src/main.cpp
    src/game/game.h
    src/game/game.cpp
    src/game/types.h
+   src/game/collider.h
+   src/game/collider.cpp
    )
 
 set(SHADERS src/shaders/default.vert
