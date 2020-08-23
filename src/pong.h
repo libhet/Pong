@@ -2,8 +2,10 @@
 #include "game/collider.h"
 #include "game/types.h"
 #include "engine/control/control.h"
+#include "glm/gtx/projection.hpp"
 
 using namespace game;
+
 
 class Player : public game::GameObject {
 public:
@@ -28,10 +30,6 @@ public:
         m_position = position;
     }
 
-    CollideBoxPtr CollideBox() const {
-        return m_collide_box;
-    }
-
 private:
     game::Vec2f m_start_pos;
     game::Vec2f m_speed = game::Vec2f(0, 400);
@@ -40,6 +38,23 @@ private:
 };
 
 using PLayerPtr = std::shared_ptr<Player>;
+
+class Border : public game::GameObject {
+public:
+    Border(game::Game *game, const std::string &name, game::Vec2f position, size_t width, size_t height)
+        : game::GameObject(game, name)
+    {
+        m_position = position;
+        m_width = width;
+        m_height = height;
+        m_collide_box = std::make_shared<game::CollideBox>(m_position, game::Vec2f(width, height));
+    }
+
+    void Update(float dt) override {}
+
+private:
+    int m_width, m_height;
+};
 
 class Ball : public game::GameObject {
 public:
@@ -54,7 +69,22 @@ public:
 
     void OnCollisionDetected(const std::shared_ptr<GameObject>& other) override {
 //        std::cout << "Collision!" << std::endl;
-        m_speed = game::Vec2f(-1, -1) * m_speed;
+        auto player = dynamic_cast<Player*>(other.get());
+        auto border = dynamic_cast<Border*>(other.get());
+
+        if(player) {
+            auto player_pos = player->GetPosition();
+            Vec2f norm = Vec2f(player_pos.x > 0 ? -1 : 1,  0);
+            auto proj = glm::proj(m_speed, norm);
+            m_speed =  m_speed - 2.f * proj + game::Vec2f(0.25, 0.25) * player->GetSpeed();
+        }
+
+        if(border) {
+            auto border_pos = border->GetPosition();
+            Vec2f norm = Vec2f( border_pos.x ? border_pos.x > 0 ? -1 : 1 : 0,  border_pos.y ? border_pos.x > 0 ? -1 : 1 : 0);
+            auto proj = glm::proj(m_speed, norm);
+            m_speed =  m_speed - 2.f * proj;
+        }
     }
 
 private:
@@ -65,6 +95,8 @@ private:
 };
 
 using BallPtr = std::shared_ptr<Ball>;
+
+
 
 class PongControl : public drw::Control {
 public:

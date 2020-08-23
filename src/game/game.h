@@ -41,6 +41,10 @@ public:
 
     void SetPosition(const Vec2f &pos);
 
+    Vec2f GetPosition() const {
+        return m_position;
+    }
+
     void SetAngle(const real &pos);
 
     void SetGame(Game *game);

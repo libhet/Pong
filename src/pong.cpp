@@ -55,9 +55,19 @@ Pong::Pong(size_t width, size_t height, const std::string &game_name)
     auto player_2 = AddGameObject(std::make_shared<Player>(this, "player2", game::Vec2f(-400,0), 20, 100, drw::color::Flame));
     auto ball = AddGameObject(std::make_shared<Ball>(this, "ball", game::Vec2f(0,0), 30, drw::color::PinkYarrow));
 
+    auto top    = AddGameObject(std::make_shared<Border>(this, "top",       game::Vec2f(0,350), 1000, 100));
+    auto bottom = AddGameObject(std::make_shared<Border>(this, "bottom",    game::Vec2f(0,-350), 1000, 100));
+    auto left   = AddGameObject(std::make_shared<Border>(this, "left",      game::Vec2f(-500,0), 100, 1000));
+    auto right  = AddGameObject(std::make_shared<Border>(this, "right",     game::Vec2f(500,0), 100, 1000));
+
     GetCollider()->AddGameObject(player_1);
     GetCollider()->AddGameObject(player_2);
     GetCollider()->AddGameObject(ball);
+
+    GetCollider()->AddGameObject(top);
+    GetCollider()->AddGameObject(bottom);
+    GetCollider()->AddGameObject(left);
+    GetCollider()->AddGameObject(right);
 
     auto main_scene = GetScene("main_scene");
     auto root = main_scene->GetRoot();
