@@ -83,7 +83,7 @@ jobs:
       id: openGL
       if: matrix.config.os == 'ubuntu-latest'
       run: |
-        sudo apt-get install -y mesa-utils
+        sudo apt-get install -y mesa-utils libgl1-mesa-dev
 
     - name: Download ccache
       id: ccache
