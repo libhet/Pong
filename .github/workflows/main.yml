@@ -70,14 +70,11 @@ jobs:
           )
         endif()
 
-    - name: Download clang-tidy
+    - name: Install clang-tidy
       id: clang-tidy
       if: matrix.config.os == 'ubuntu-latest' && matrix.config.build_type == 'Debug' && matrix.config.cc == 'clang'
       run: |
-        sudo apt-add-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main"
-        sudo apt-get update
-        sudo apt-get install -y clang-tidy-8
-        sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-8 1000
+        sudo apt-get install -y clang-tidy-10
 
     - name: Download OpenGL
       id: openGL
