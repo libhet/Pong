@@ -7,12 +7,12 @@
 using namespace game;
 
 
-class Player : public game::GameObject {
+class Player final : public game::GameObject {
 public:
     Player(game::Game *game, const std::string &name) : game::GameObject(game, name) {}
     Player(game::Game *game, const std::string &name, game::Vec2f position, size_t width, size_t height, drw::Color color);
 
-    void Update(float dt) override;
+    void Update([[maybe_unused]] float dt) override;
 
     void SetSpeed(game::Vec2f speed) {
         m_speed = speed;
@@ -30,6 +30,8 @@ public:
         m_position = position;
     }
 
+    ~Player() = default;
+
 private:
     game::Vec2f m_start_pos;
     game::Vec2f m_speed = game::Vec2f(0, 400);
@@ -39,7 +41,7 @@ private:
 
 using PLayerPtr = std::shared_ptr<Player>;
 
-class Border : public game::GameObject {
+class Border final : public game::GameObject {
 public:
     Border(game::Game *game, const std::string &name, game::Vec2f position, size_t width, size_t height)
         : game::GameObject(game, name)
@@ -50,13 +52,15 @@ public:
         m_collide_box = std::make_shared<game::CollideBox>(m_position, game::Vec2f(width, height));
     }
 
-    void Update(float dt) override {}
+    void Update([[maybe_unused]] float dt) override {}
+
+    ~Border() = default;
 
 private:
     int m_width, m_height;
 };
 
-class Ball : public game::GameObject {
+class Ball final : public game::GameObject {
 public:
     Ball(game::Game *game, const std::string &name) : game::GameObject(game, name) {}
     Ball(game::Game *game, const std::string &name, game::Vec2f position, size_t radius, drw::Color color);
@@ -87,6 +91,8 @@ public:
         }
     }
 
+    ~Ball() = default;
+
 private:
     game::Vec2f m_start_pos;
     game::Vec2f m_speed = game::Vec2f(200, 0);
@@ -100,7 +106,9 @@ using BallPtr = std::shared_ptr<Ball>;
 
 class PongControl : public drw::Control {
 public:
-    void KeyCallbackImpl(GLFWwindow* window, int key, int scancode, int action, int mode) override {
+    void KeyCallbackImpl(GLFWwindow* window, int key,
+                         [[maybe_unused]] int scancode, int action,
+                         [[maybe_unused]]  int mode) override {
         if (key == GLFW_KEY_UNKNOWN) return;
 
         if(action == GLFW_PRESS) {
