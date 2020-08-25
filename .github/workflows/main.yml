@@ -153,6 +153,8 @@ jobs:
           message(FATAL_ERROR "Bad exit status")
         endif()
 
+    - name: Check
+      run: pwd && ls -la 
 
     - name: Install Strip
       run: ${{ steps.cmake.outputs.cmake_dir }}/cmake --install build --prefix instdir --strip
