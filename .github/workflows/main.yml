@@ -80,7 +80,7 @@ jobs:
       id: openGL
       if: matrix.config.os == 'ubuntu-latest'
       run: |
-        sudo apt-get install -y mesa-utils libgl1-mesa-dev libglew-dev libglfw3-dev libglm-dev
+        sudo apt-get install -y mesa-utils libgl1-mesa-dev libglew-dev libglfw3-dev libglm-dev tree
 
     - name: Configure
       shell: cmake -P {0}
@@ -154,7 +154,12 @@ jobs:
         endif()
 
     - name: Check
-      run: pwd && ls -la 
+      run: pwd && ls -la
+
+
+    - name: Check2
+      run: tree
+
 
     - name: Install Strip
       run: ${{ steps.cmake.outputs.cmake_dir }}/cmake --install build --prefix instdir --strip
