@@ -162,8 +162,7 @@ jobs:
 
 
     - name: Pack
-      working-directory: instdir
-      run: tar -czfv ../${{ matrix.config.artifact }} .
+      run: tar -czvf ../${{ matrix.config.artifact }} .
 
 
     - name: Upload
