@@ -163,7 +163,7 @@ jobs:
 
     - name: Pack
       working-directory: instdir
-      run: ${{ steps.cmake.outputs.cmake_dir }}/cmake -E tar czfv ../${{ matrix.config.artifact }} .
+      run: tar -czfv ../${{ matrix.config.artifact }} .
 
 
     - name: Upload
