@@ -71,7 +71,7 @@ set(SHADERS src/shaders/default.vert
 
 add_executable(pong_the_game ${SOURCES} ${SHADERS})
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+if (CMAKE_BUILD_TYPE STREQUAL "Debug" AND CLANG_TIDY AND NOT CLANG_TIDY-NOTFOUND)
   find_program(CLANG_TIDY clang-tidy)
   message(STATUS "Found clang-tidy ${CLANG_TIDY}")
 
