@@ -74,7 +74,7 @@ jobs:
       id: clang-tidy
       if: matrix.config.os == 'ubuntu-latest' && matrix.config.build_type == 'Debug' && matrix.config.cc == 'clang'
       run: |
-        sudo apt-get install -y clang-tidy-10
+        sudo apt-get install -y clang-tidy-10 clang-tidy
 
     - name: Download OpenGL
       id: openGL
