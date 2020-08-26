@@ -20,21 +20,21 @@ jobs:
             os: ubuntu-latest,
             build_type: "Release", cc: "gcc", cxx: "g++"
           }
-#        - {
-#            name: "Release Clang Ubuntu Latest", artifact: "Linux.tar.gz",
-#            os: ubuntu-latest,
-#            build_type: "Release", cc: "clang", cxx: "clang++"
-#          }
-#        - {
-#            name: "Debug Clang Ubuntu Latest", artifact: "Linux.tar.gz",
-#            os: ubuntu-latest,
-#            build_type: "Debug", cc: "clang", cxx: "clang++"
-#          }
-#        - {
-#            name: "Release Windows MinGW", artifact: "Windows-MinGW.tar.gz",
-#            os: windows-latest,
-#            build_type: "Release", cc: "gcc", cxx: "gcc++"
-#          }
+        - {
+            name: "Release Clang Ubuntu Latest", artifact: "Linux.tar.gz",
+            os: ubuntu-latest,
+            build_type: "Release", cc: "clang", cxx: "clang++"
+          }
+        - {
+            name: "Debug Clang Ubuntu Latest", artifact: "Linux.tar.gz",
+            os: ubuntu-latest,
+            build_type: "Debug", cc: "clang", cxx: "clang++"
+          }
+        - {
+            name: "Release Windows MinGW", artifact: "Windows-MinGW.tar.gz",
+            os: windows-latest,
+            build_type: "Release", cc: "gcc", cxx: "gcc++"
+          }
 
     steps:
     - uses: actions/checkout@v1
