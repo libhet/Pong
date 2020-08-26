@@ -30,11 +30,11 @@ jobs:
             os: ubuntu-latest,
             build_type: "Debug", cc: "clang", cxx: "clang++"
           }
-        - {
-            name: "Release Windows MinGW", artifact: "Windows-MinGW.tar.gz",
-            os: windows-latest,
-            build_type: "Release", cc: "gcc", cxx: "gcc++"
-          }
+#        - {
+#            name: "Release Windows MinGW", artifact: "Windows-MinGW.tar.gz",
+#            os: windows-latest,
+#            build_type: "Release", cc: "gcc", cxx: "gcc++"
+#          }
 
     steps:
     - uses: actions/checkout@v1
@@ -153,16 +153,9 @@ jobs:
           message(FATAL_ERROR "Bad exit status")
         endif()
 
-    - name: Check
-      run: pwd && ls -la
-
-
-    - name: Check2
-      run: tree
-
 
     - name: Pack
-      run: tar -czvf ../${{ matrix.config.artifact }} .
+      run: tar -czvf ../${{ matrix.config.artifact }} build
 
 
     - name: Upload
@@ -213,10 +206,10 @@ jobs:
             name: "Ubuntu Latest Clang", artifact: "Linux.clang.tar.gz",
             os: ubuntu-latest
           }
-        - {
-            name: "Windows MinGW", artifact: "Windows-MinGW.tar.gz",
-            os: windows-latest
-          }
+#        - {
+#            name: "Windows MinGW", artifact: "Windows-MinGW.tar.gz",
+#            os: windows-latest
+#          }
     needs: release
 
     steps:
