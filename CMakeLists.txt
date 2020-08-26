@@ -36,15 +36,8 @@ endif()
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if (CMAKE_BUILD_TYPE EQUAL "DEBUG")
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(COMPILE_OPTIONS -Wall -Wextra -Wpedantic)
-
-  find_program(CLANG_TIDY clang-tidy)
-  message(STATUS "Found clang-tidy ${CLANG_TIDY}")
-
-  set_target_properties(pong_the_game
-          PROPERTIES CXX_CLANG_TIDY
-          "${CLANG_TIDY};-warnings-as-errors=*;-p='${CMAKE_CURRENT_BINARY_DIR}';-header-filter='${CMAKE_CURRENT_SOURCE_DIR}/*'")
 
 endif()
 
@@ -77,6 +70,16 @@ set(SHADERS src/shaders/default.vert
     )
 
 add_executable(pong_the_game ${SOURCES} ${SHADERS})
+
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+  find_program(CLANG_TIDY clang-tidy)
+  message(STATUS "Found clang-tidy ${CLANG_TIDY}")
+
+  set_target_properties(pong_the_game
+          PROPERTIES CXX_CLANG_TIDY
+          "${CLANG_TIDY};-warnings-as-errors=*;-p='${CMAKE_CURRENT_BINARY_DIR}';-header-filter='${CMAKE_CURRENT_SOURCE_DIR}/*'")
+
+endif()
 
 add_custom_command(TARGET pong_the_game PRE_BUILD
                    COMMAND ${CMAKE_COMMAND}
