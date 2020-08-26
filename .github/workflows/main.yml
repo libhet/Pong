@@ -155,13 +155,13 @@ jobs:
 
 
     - name: Pack
-      run: tar -czvf ../${{ matrix.config.artifact }} build
+      run: tar -czvf ${{ matrix.config.artifact }} build
 
 
     - name: Upload
       uses: actions/upload-artifact@v1
       with:
-        path: ./../${{ matrix.config.artifact }}
+        path: ./${{ matrix.config.artifact }}
         name: ${{ matrix.config.artifact }}
 
   release:
@@ -191,7 +191,6 @@ jobs:
         name: upload_url
 
   publish:
-    if: contains(github.ref, 'tags/v')
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
     strategy:
