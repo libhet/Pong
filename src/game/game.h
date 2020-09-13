@@ -15,14 +15,6 @@
 #include "collider.h"
 
 
-namespace drw {
-
-class Context;
-class Control;
-
-using ContextPtr = std::unique_ptr<Context>;
-}
-
 namespace game {
 
 class Collider;
@@ -51,7 +43,8 @@ public:
         return m_name;
     }
 
-    virtual void OnCollisionDetected(const std::shared_ptr<GameObject>& other) {
+    virtual void OnCollisionDetected(
+            [[maybe_unused]]const std::shared_ptr<GameObject>& other) {
 
     }
 

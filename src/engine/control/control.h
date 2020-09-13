@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "../render_open_gl.h"
-#include "../../game/game.h"
 
 namespace game {
 class Game;
