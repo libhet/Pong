@@ -2,6 +2,11 @@
 #include "game/collider.h"
 #include "game/game.h"
 #include "game/types.h"
+#include "engine/control/control.h"
+// Avoid error: /usr/include/glm/gtx/projection.hpp:19:3: error: 
+// "GLM: GLM_GTX_projection is an experimental extension and may change in the future. 
+// Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it."
+#define GLM_ENABLE_EXPERIMENTAL 
 #include "glm/gtx/projection.hpp"
 
 using namespace game;
