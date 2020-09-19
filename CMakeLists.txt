@@ -58,8 +58,8 @@ set(SOURCES src/main.cpp
    src/engine/scene/mesh.cpp
    src/engine/control/control.h
    src/engine/control/control.cpp
-   src/engine/utilities/inpitUtilities.h
-   src/engine/utilities/inpitUtilities.cpp
+   src/engine/utilities/inpit_utilities.h
+   src/engine/utilities/inpit_utilities.cpp
    src/game/game.h
    src/game/game.cpp
    src/game/types.h

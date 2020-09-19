@@ -1,4 +1,4 @@
-#include "inpitUtilities.h"
+#include "inpit_utilities.h"
 
 #include <GLFW/glfw3.h>
 
@@ -10,7 +10,7 @@ namespace drw
 namespace utilities
 {
 
-int convertScancodeToKey(int scancode, [[maybe_unused]] int mode)
+int ConvertScancodeToKey(int scancode, [[maybe_unused]] int mode)
 {
     auto res = scancode;
 
