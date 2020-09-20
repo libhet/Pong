@@ -1,7 +1,7 @@
 #include "pong.h"
 #include "engine/scene/mesh.h"
 
-#include "engine/utilities/inpitUtilities.h"
+#include "engine/utilities/inpit_utilities.h"
 
 Player::Player(
     game::Game* game,
@@ -117,7 +117,7 @@ void PongControl::KeyCallbackImpl(
 {
     if (key == GLFW_KEY_UNKNOWN)
     {
-        key = drw::utilities::convertScancodeToKey(scancode, mode);
+        key = drw::utilities::ConvertScancodeToKey(scancode, mode);
     }
 
     if (action == GLFW_PRESS)
